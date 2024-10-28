@@ -1,10 +1,10 @@
 # このAPIを使用するための準備
 
-	1.	必要なパッケージのインストール
+	1.　必要なパッケージのインストール
 	    • SQLAlchemyのインストール
 	    • FastAPIのインストール
 	    • Alembicのインストール
-	2.	Alembicの設定
+	2.　Alembicの設定
 	    • alembicの初期化後に設定ファイルを編集します。
 	    • alembic.ini: データベースの接続情報を設定します。
 	    • env.py: 使用するモデルをインポートしてください。
@@ -50,7 +50,7 @@ FastAPIでは、ルーティングを利用してAPIエンドポイントを定�
 
 ## 説明
 
-	1.	エンドポイントデコレーター
+	1.　エンドポイントデコレーター
 
         @router.get("/bar/{val}", response_model=BarResponse, tags=["bar"])
 
@@ -58,7 +58,7 @@ FastAPIでは、ルーティングを利用してAPIエンドポイントを定�
 	    • レスポンスモデル: response_modelで返却するデータの型を指定します。
 	    • タグ: tagsでAPIの関連タグを指定します。
 
-	2.	関数宣言
+	2.　関数宣言
 
         def barbar_api(val: int, db: Session = Depends(get_db)):
 
@@ -66,7 +66,7 @@ FastAPIでは、ルーティングを利用してAPIエンドポイントを定�
 	    • val: パスパラメータとして受け取る値。
 	    • db: Session = Depends(get_db): get_db関数からデータベースのセッションを注入します。
 
-	3.	戻り値
+	3.　戻り値
 	    •response_modelで指定した型に基づき、戻り値を構成します。
 
 ## db: Session = Depends(get_db) の説明

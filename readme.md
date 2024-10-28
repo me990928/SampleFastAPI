@@ -14,26 +14,23 @@
 
 FastAPIでは、ルーティングを利用してAPIエンドポイントを定義します。ファイルを分割することでコードの可読性が向上します。
 
-1. ルーターの作成 router.py
+1. サブルーターの作成<br>
+    各APIのページでサブルーターを宣言<br>
 
-        from fastapi import APIRouter
+        xxx.py
+        router = APIRouter()
 
-        api_router = APIRouter()  # ルーターのインスタンスを作成
+2. ルーターの紐付け<br>
 
-2. ルーターへの紐付け
+        router.py
+        import xxx as xxx_api
+        api_router.include_router(xxx_api.router, prefix="/hoge")
 
-        ルーターにエンドポイントを追加し、main.pyのFastAPIインスタンスに紐付けることで、エンドポイントにアクセス可能になります。
+3. main.py で FastAPI インスタンスに紐付け
 
-## サブルーターの作成
-各APIのページでサブルーターを宣言<br>
-router = APIRouter()
-
-## ルーターの紐付け
-router.py<br>
-api_router.include_router(router, prefix="/hoge")
-
-## main.py で FastAPI インスタンスに紐付け
-app.include_router(api_router, prefix="/foo")
+        main.py
+        app = FastAPI()
+        app.include_router(api_router, prefix="/foo")
 
 この設定で、http://localhost:8000/foo/hoge にアクセスできます。
 
@@ -47,26 +44,26 @@ app.include_router(api_router, prefix="/foo")
 
     router = APIRouter()
 
-    @router.get("/foo/{hoge}", response_model=HogeResponse, tags=["bar"])
-    def hogehoge_api(hoge: int, db: Session = Depends(get_db)):
-        return hogehoge(hoge, db)
+    @router.get("/bar/{val}", response_model=HogeResponse, tags=["bar"])
+    def barbar_api(val: int, db: Session = Depends(get_db)):
+        return barbat(val, db)
 
 ## 説明
 
 	1.	エンドポイントデコレーター
 
-        @router.get("/foo/{hoge}", response_model=HogeResponse, tags=["bar"])
+        @router.get("/bar/{val}", response_model=BarResponse, tags=["bar"])
 
-	    • パスパラメータ: "/foo/{hoge}"のhoge部分がパスパラメータとして使用されます。
+	    • パスパラメータ: "/bar/{val}"のval部分がパスパラメータとして使用されます。
 	    • レスポンスモデル: response_modelで返却するデータの型を指定します。
 	    • タグ: tagsでAPIの関連タグを指定します。
 
 	2.	関数宣言
 
-        def hogehoge_api(hoge: int, db: Session = Depends(get_db)):
+        def barbar_api(val: int, db: Session = Depends(get_db)):
 
 	    • 引数:
-	    • hoge: パスパラメータとして受け取る値。
+	    • val: パスパラメータとして受け取る値。
 	    • db: Session = Depends(get_db): get_db関数からデータベースのセッションを注入します。
 
 	3.	戻り値
@@ -76,6 +73,11 @@ app.include_router(api_router, prefix="/foo")
 
 	• get_dbはデータベースのセッションを提供するための関数で、database.py内で定義されていると仮定します。
 	• Dependsを使用することで、APIが呼び出されるたびにデータベースの接続が確立され、処理が完了後に閉じられます。
+
+## エンドポイントへアクセスするためのリンク
+
+    http://~/foo/hoge/bar/{val}
+    * valは引数に準拠する値
 
 # 非同期なAPIを作成する
 データベースを扱う場合、非同期で行う方が効率的です。そこで非同期に対応した書き方の例を載せます。
